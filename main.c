@@ -17,8 +17,6 @@
 // #pragma config statements should precede project file includes.
 // Use project enums instead of #define for ON and OFF.
 
-
-#define _XTAL_FREQ 1000000 // para usar delay
 #include <xc.h>
 #include <stdlib.h>
 #include <stdio.h>
