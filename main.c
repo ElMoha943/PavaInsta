@@ -14,28 +14,22 @@
 #pragma config BOR4V = BOR40V   // Brown-out Reset Selection bit (Brown-out Reset set to 4.0V)
 #pragma config WRT = OFF        // Flash Program Memory Self Write Enable bits (Write protection off)
 
-// #pragma config statements should precede project file includes.
-// Use project enums instead of #define for ON and OFF.
-
 #include <xc.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include "pava.h"
+#include "house.h"
 #include <string.h>
+
 void main(){
     //Configura entradas y salidas
-    ANSEL=0b00000010; //1=entrada analogica 0=entrada digital
-    ADCON0=0b10000111;
-    ADCON1=10000000;
-    TRISA=0b00000011;
-    TRISB=0b00000000;
-    TRISD=0x00;
-    TRISE=0x00;
-    PORTA=0x00;
-    PORTB=0x00;
-    PORTC=0x00;
-    PORTD=0x00;
-    PORTE=0x00;
+    ANSEL=0;
+    ANSELH=0;
+    OPTION_REG=0x04;
+    TRISA=0b00000010;
+    TRISB=0x00;
+    TRISC=0x00;
+    TRISC7=1;
+    
     //Configura UART a 9600 baudios
     TXSTAbits.TXEN=1;
     TXSTAbits.BRGH=1;
@@ -45,60 +39,84 @@ void main(){
     SPBRG=25;
     SPBRGH=0;
     
-    while(1)
-    {
-        if (RCIF == 1){ //Recibe comandos del dispositivo maestro
+    //Configura puerto AD
+    ANSEL=0;
+    ANSELbits.ANS1=1;
+    ADCON1bits.ADFM=1;
+    ADCON1bits.VCFG0=0;
+    ADCON1bits.VCFG1=0;
+    ADCON0bits.ADON=1;
+    ADCON0bits.CHS=1;
+    
+    RA3=0;
+    RA4=0;
+    RA5=0;
+    
+    float resultado;
+    int contador=0;
+    while(1){
+        //RECIBE UN COMANDO
+        if(T0IF==1)
+        {
+            TMR0=TMR0+131;
+            T0IF=0;
+            contador++;
+            if (contador==500){
+                contador=0;
+                //MIDE TEMPERATURA
+                ADCON0bits.GO=1;
+                while (ADCON0bits.GO==1)
+                resultado= (ADRESH<<8)+ADRESL;
+                __delay_ms(2);
+//                valor= (((float)caca)*5/1023)*100;
+//                ENCIENDE LEDS DEPENDIENDO DE LA TEMPERATURA
+                if(resultado<163) // 0°
+                {
+                    PORTB=0b00000000; 
+                    PORTA=0b00000000;
+                } 
+                else if(resultado<184) //  80°
+                {
+                    PORTB=0b11110000; 
+                    PORTA=0b00000000;
+                } 
+                else if(resultado<204) // 90°
+                {
+                    PORTB=0b11111100; 
+                    PORTA=0b00000000;
+                } 
+                else if(resultado>=204) // 100°
+                {
+                    PORTB=0b11111111; 
+                    PORTA=0b11000000;
+                } 
+            }
+        }
+        if (RCIF == 1){
             RX_Byte();
         }
         switch(modo) //control de relees a R calefactora
         {
             case 1: //apagado, 0°
-                RA2=0;
                 RA3=0;
+                RA4=0;
                 RA5=0;
                 break;
             case 2: // 80°
-                RA2=1;
-                RA3=0;
+                RA3=1;
+                RA5=0;
                 RA5=0;
                 break;
             case 3: // 90°
-                RA2=0;
                 RA3=0;
-                RA5=1;
-                break;
-            case 4: // 100°
-                RA2=0;
-                RA3=1;
+                RA4=1;
                 RA5=0;
                 break;
+            case 4: // 100°
+                RA3=0;
+                RA4=0;
+                RA5=1;
+                break;
         }
-        //MIDE TEMPERATURA
-        GO_DONE=1; // empieza la conversión
-        __delay_ms(1); // espera el fin de la conversión
-        resultado=ADRESH<<8;
-        resultado=resultado+ADRESL;
-        //ENCIENDE LEDS DEPENDIENDO DE LA TEMPERATURA
-        if(resultado<163) // 0°
-        {
-            PORTB=0b00000000; 
-            PORTA=0b00000000;
-        } 
-        else if(resultado<184) //  80°
-        {
-            PORTB=0b11110000; 
-            PORTA=0b00000000;
-        } 
-        else if(resultado<204) // 90°
-        {
-            PORTB=0b11111100; 
-            PORTA=0b00000000;
-        } 
-        else if(resultado>=204) // 100°
-        {
-            PORTB=0b11111111; 
-            PORTA=0b11000000;
-        } 
     }
 }
-    
