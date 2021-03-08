@@ -69,8 +69,14 @@ void ProcesarArray(void){
         else if ((ArrayProc[0]=='[')&&(ArrayProc[1]=='C')&&(ArrayProc[2]=='O')&&(ArrayProc[3]==',')&&(ArrayProc[5]==',')&&(ArrayProc[11]==',')&&(ArrayProc[14]==',')&&(ArrayProc[17]==']')){
             if(ArrayProc[4]=='1')
             {
+                char cosa[];
                 float valor= (((float)resultado)*5/1023)*100;
-                SendSerial(valor);
+                cosa[0] = (valor/100)+'0';
+                cosa[1] = ((valor/10)%10)+'0';
+                cosa[2] = (valor%10)+'0';
+                cosa[3] = 'º';
+                cosa[4] = 'C';
+                SendSerial(cosa);
             }
         }
     }
