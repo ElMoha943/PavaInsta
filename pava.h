@@ -8,9 +8,10 @@ unsigned char J[5]="00001", REF1[10]="Disp", REF2[50]="Dispositivo que controla 
 unsigned char recibido, comando, command_data[10], command_data_index=0, command;
 unsigned char ArrayRX[20], Indice, ArrayProc[20];
 unsigned char modo;
+int resultado;
 
 //FUNCIONES
-void SendSerial(unsigned char *data, unsigned char lenght);
+//void SendSerial(unsigned char *data, unsigned char lenght);
 void RX_Byte(void);
 void ProcesarArray(void);
 unsigned char Codigo(void);
