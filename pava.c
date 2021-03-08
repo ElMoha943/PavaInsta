@@ -4,15 +4,17 @@
 #include <stdio.h>
 #include <string.h>
 
-//void SendSerial(unsigned char *data, unsigned char lenght)
-//{
-//    unsigned char x=0;
-//    while(x<lenght){
-//        while(PIR1bits.TXIF==0)   
-//        TXREG=data[x];        
-//        x++;
-//    }            
-//}
+void SendSerial(unsigned char *data)
+{
+    unsigned char lenght;
+    lenght=strlen(data);
+    unsigned char x=0;
+    while(x<lenght){
+        while(PIR1bits.TXIF==0){}        
+        TXREG=data[x];        
+        x++;
+    }            
+}
 
 void RX_Byte(void){
     unsigned char i;
@@ -38,10 +40,10 @@ void ProcesarArray(void){
         if ((ArrayProc[0]=='[')&&(ArrayProc[1]=='C')&&(ArrayProc[2]=='R')&&(ArrayProc[3]==',')&&(ArrayProc[5]==',')&&(ArrayProc[11]==']')){
             // En posiciones 6 a 10 tengo los caracteres que representan el número de dispositivo con quien se quiere comunicar 
             if(ArrayProc[4]=='1'){ // El maestro me solicita la REF1
-                printf("%s",REF1);
+                SendSerial(REF1);
             }
             if(ArrayProc[4]=='2'){ // El maestro me solicita la REF2
-                printf("%s",REF2);
+                SendSerial(REF2);
             }
         }
         //PEDIDO DE ACCION [PA,4,00001,xx,xx]e
@@ -65,11 +67,10 @@ void ProcesarArray(void){
         }
         //CONSULTA A DISPOSITIVO [CO,1,00001,XX,XX]e
         else if ((ArrayProc[0]=='[')&&(ArrayProc[1]=='C')&&(ArrayProc[2]=='O')&&(ArrayProc[3]==',')&&(ArrayProc[5]==',')&&(ArrayProc[11]==',')&&(ArrayProc[14]==',')&&(ArrayProc[17]==']')){
-            unsigned char caca[6], valor=0;
             if(ArrayProc[4]=='1')
             {
-                float valor = (((float)resultado)*5/1023)*100;
-                printf("%.1f",valor);
+                float valor= (((float)resultado)*5/1023)*100;
+                SendSerial(valor);
             }
         }
     }
@@ -88,9 +89,4 @@ unsigned char Codigo(){ //[CR,1,00001]e
         else {
             return 0;
         }
-}
-
-void putch(char c) {
-    while(PIR1bits.TXIF==0)
-    TXREG=c;
 }
