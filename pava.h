@@ -11,7 +11,7 @@ unsigned char modo;
 int resultado;
 
 //FUNCIONES
-//void SendSerial(unsigned char *data, unsigned char lenght);
+void SendSerial(unsigned char *data, unsigned char lenght);
 void RX_Byte(void);
 void ProcesarArray(void);
 unsigned char Codigo(void);
