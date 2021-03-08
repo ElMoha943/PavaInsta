@@ -12,7 +12,6 @@ void SendSerial(unsigned char *data)
     while(data[x]!='\0'){
         while(PIR1bits.TXIF==0){}   
         TXREG=data[x];
-        TXREG='\n';
         x++;
     }
 }
@@ -21,7 +20,6 @@ void RX_Byte(void){
     unsigned char i;
     ArrayRX[Indice] = RCREG;
     while(PIR1bits.TXIF == 0){}
-    TXREG='\n';
     TXREG = ArrayRX[Indice];
     if (ArrayRX[Indice] == 'e'){
         // ArrayRX a ArrayProc
