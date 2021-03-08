@@ -7,19 +7,21 @@
 void SendSerial(unsigned char *data)
 {
     unsigned char lenght;
-    lenght=strlen(data);
+//    lenght=strlen(data);
     unsigned char x=0;
-    while(x<lenght){
-        while(PIR1bits.TXIF==0){}        
-        TXREG=data[x];        
+    while(data[x]!='\0'){
+        while(PIR1bits.TXIF==0){}   
+        TXREG=data[x];
+        TXREG='\n';
         x++;
-    }            
+    }
 }
 
 void RX_Byte(void){
     unsigned char i;
     ArrayRX[Indice] = RCREG;
     while(PIR1bits.TXIF == 0){}
+    TXREG='\n';
     TXREG = ArrayRX[Indice];
     if (ArrayRX[Indice] == 'e'){
         // ArrayRX a ArrayProc
@@ -69,13 +71,12 @@ void ProcesarArray(void){
         else if ((ArrayProc[0]=='[')&&(ArrayProc[1]=='C')&&(ArrayProc[2]=='O')&&(ArrayProc[3]==',')&&(ArrayProc[5]==',')&&(ArrayProc[11]==',')&&(ArrayProc[14]==',')&&(ArrayProc[17]==']')){
             if(ArrayProc[4]=='1')
             {
-                char cosa[];
-                float valor= (((float)resultado)*5/1023)*100;
+                char cosa[4];
+                int valor = (((float)resultado)*5/1023)*100;
                 cosa[0] = (valor/100)+'0';
                 cosa[1] = ((valor/10)%10)+'0';
                 cosa[2] = (valor%10)+'0';
-                cosa[3] = 'º';
-                cosa[4] = 'C';
+                cosa[3] = 'C';
                 SendSerial(cosa);
             }
         }
