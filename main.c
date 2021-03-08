@@ -52,7 +52,6 @@ void main(){
     RA4=0;
     RA5=0;
     
-    float resultado;
     int contador=0;
   
     while(1){
