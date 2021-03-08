@@ -53,8 +53,8 @@ void main(){
     RA5=0;
     
     int contador=0;
-  
     while(1){
+        //RECIBE UN COMANDO
         if(T0IF==1)
         {
             TMR0=TMR0+131;
@@ -67,7 +67,7 @@ void main(){
                 while (ADCON0bits.GO==1)
                 resultado= (ADRESH<<8)+ADRESL;
                 __delay_ms(2);
-//              ENCIENDE LEDS DEPENDIENDO DE LA TEMPERATURA
+//                ENCIENDE LEDS DEPENDIENDO DE LA TEMPERATURA
                 if(resultado<163) // 0°
                 {
                     PORTB=0b00000000; 
@@ -90,7 +90,6 @@ void main(){
                 } 
             }
         }
-        //ESPERA A RECIBIR UN COMANDO
         if (RCIF == 1){
             RX_Byte();
         }
