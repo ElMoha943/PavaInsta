@@ -4,15 +4,15 @@
 #include <stdio.h>
 #include <string.h>
 
-void SendSerial(unsigned char *data, unsigned char lenght)
-{
-    unsigned char x=0;
-    while(x<lenght){
-        while(PIR1bits.TXIF==0){}        
-        TXREG=data[x];        
-        x++;
-    }            
-}
+//void SendSerial(unsigned char *data, unsigned char lenght)
+//{
+//    unsigned char x=0;
+//    while(x<lenght){
+//        while(PIR1bits.TXIF==0)   
+//        TXREG=data[x];        
+//        x++;
+//    }            
+//}
 
 void RX_Byte(void){
     unsigned char i;
@@ -38,10 +38,10 @@ void ProcesarArray(void){
         if ((ArrayProc[0]=='[')&&(ArrayProc[1]=='C')&&(ArrayProc[2]=='R')&&(ArrayProc[3]==',')&&(ArrayProc[5]==',')&&(ArrayProc[11]==']')){
             // En posiciones 6 a 10 tengo los caracteres que representan el número de dispositivo con quien se quiere comunicar 
             if(ArrayProc[4]=='1'){ // El maestro me solicita la REF1
-                SendSerial(REF1,10);
+                printf("%s",REF1);
             }
             if(ArrayProc[4]=='2'){ // El maestro me solicita la REF2
-                SendSerial(REF2,50);
+                printf("%s",REF2);
             }
         }
         //PEDIDO DE ACCION [PA,4,00001,xx,xx]e
@@ -49,7 +49,6 @@ void ProcesarArray(void){
             if(ArrayProc[4]=='1') 
             {
                 modo=1;
-                SendSerial(REF1,10);
             }
             else if(ArrayProc[4]=='2') 
             {    
@@ -69,22 +68,8 @@ void ProcesarArray(void){
             unsigned char caca[6], valor=0;
             if(ArrayProc[4]=='1')
             {
-                if(modo==1)
-                {
-                   SendSerial("La temperatura es 0°",20); 
-                }
-                if(modo==2)
-                {
-                    SendSerial("La temperatura es 80°",21);
-                }
-                if(modo==3)
-                {
-                    SendSerial("La temperatura es 90°",21);
-                }
-                if(modo==4)
-                {
-                    SendSerial("La temperatura es 100°",22);
-                }
+                float valor = (((float)resultado)*5/1023)*100;
+                printf("%.1f",valor);
             }
         }
     }
@@ -103,4 +88,9 @@ unsigned char Codigo(){ //[CR,1,00001]e
         else {
             return 0;
         }
+}
+
+void putch(char c) {
+    while(PIR1bits.TXIF==0)
+    TXREG=c;
 }
