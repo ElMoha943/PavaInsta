@@ -7,7 +7,6 @@
 void SendSerial(unsigned char *data)
 {
     unsigned char lenght;
-//    lenght=strlen(data);
     unsigned char x=0;
     while(data[x]!='\0'){
         while(PIR1bits.TXIF==0){}   
@@ -69,7 +68,7 @@ void ProcesarArray(void){
         else if ((ArrayProc[0]=='[')&&(ArrayProc[1]=='C')&&(ArrayProc[2]=='O')&&(ArrayProc[3]==',')&&(ArrayProc[5]==',')&&(ArrayProc[11]==',')&&(ArrayProc[14]==',')&&(ArrayProc[17]==']')){
             if(ArrayProc[4]=='1')
             {
-                char cosa[4];
+                unsigned char cosa[4];
                 int valor = (((float)resultado)*5/1023)*100;
                 cosa[0] = (valor/100)+'0';
                 cosa[1] = ((valor/10)%10)+'0';
@@ -88,7 +87,7 @@ unsigned char Codigo(){ //[CR,1,00001]e
         Auxi[2]=ArrayProc[8];
         Auxi[3]=ArrayProc[9];
         Auxi[4]=ArrayProc[10];        
-        if(strcmp(Auxi,"00001")){
+        if(strcmp(Auxi,J)){
             return 1;
         }
         else {
