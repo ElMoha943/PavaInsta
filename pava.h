@@ -4,8 +4,7 @@
 #define _XTAL_FREQ 4000000
 
 //VARIABLES
-unsigned char J[]="00000", REF1[10]="Disp", REF2[55]="Dispositivo que controla la temperatura de una pava.";
-unsigned char recibido, comando, command_data[10], command_data_index=0, command;
+unsigned char J[5]="00000", REF1[10]="Disp", REF2[55]="Dispositivo que controla la temperatura de una pava.";
 unsigned char ArrayRX[20], Indice, ArrayProc[20];
 unsigned char modo;
 int resultado;
