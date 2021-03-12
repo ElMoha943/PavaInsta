@@ -1,5 +1,5 @@
-#include <xc.h>
-#include "pava.h"
+#include<xc.h>
+#include"pava.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -34,7 +34,7 @@ void RX_Byte(void){
 }
 
 void ProcesarArray(void){
-    if((ArrayProc[6]==J[0])&&(ArrayProc[7]==J[1])&&(ArrayProc[8]==J[2])&&(ArrayProc[9]==J[3])&&(ArrayProc[10]==J[4])){
+    if((ArrayProc[6]==RD0+'0')&&(ArrayProc[7]==RD1+'0')&&(ArrayProc[8]==RD2+'0')&&(ArrayProc[9]==RD3+'0')&&(ArrayProc[10]==RD4+'0')){
     //CONSULTA REF [RC,1,00001]e
         if ((ArrayProc[0]=='[')&&(ArrayProc[1]=='C')&&(ArrayProc[2]=='R')&&(ArrayProc[3]==',')&&(ArrayProc[5]==',')&&(ArrayProc[11]==']')){
             // En posiciones 6 a 10 tengo los caracteres que representan el número de dispositivo con quien se quiere comunicar 
