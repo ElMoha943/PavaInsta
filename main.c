@@ -52,12 +52,6 @@ void main(){
     RA4=0;
     RA5=0;
     
-    if(RD0==1) J[0]=1;
-    if(RD1==1) J[1]=1;
-    if(RD2==1) J[2]=1;
-    if(RD3==1) J[3]=1;
-    if(RD4==1) J[4]=1;
-    
     int contador=0;
     while(1){
         //RECIBE UN COMANDO
@@ -96,6 +90,12 @@ void main(){
                 } 
             }
         }
+        //JUMPERS
+        if(RD0==1) J[0]=1; else J[0]=0;
+        if(RD1==1) J[1]=1; else J[0]=0;
+        if(RD2==1) J[2]=1; else J[0]=0;
+        if(RD3==1) J[3]=1; else J[0]=0;
+        if(RD4==1) J[4]=1; else J[0]=0;
         if (RCIF == 1){
             RX_Byte();
         }
