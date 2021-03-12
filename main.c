@@ -27,8 +27,9 @@ void main(){
     OPTION_REG=0x04;
     TRISA=0b00000010;
     TRISB=0x00;
-    TRISC=0x00;
-    TRISC7=1;
+    TRISC=0xFF;
+    TRISC6=0;
+    TRISD=0xFF;
     
     //Configura UART a 9600 baudios
     TXSTAbits.TXEN=1;
@@ -90,12 +91,6 @@ void main(){
                 } 
             }
         }
-        //JUMPERS
-        if(RD0==1) J[0]=1; else J[0]=0;
-        if(RD1==1) J[1]=1; else J[0]=0;
-        if(RD2==1) J[2]=1; else J[0]=0;
-        if(RD3==1) J[3]=1; else J[0]=0;
-        if(RD4==1) J[4]=1; else J[0]=0;
         if (RCIF == 1){
             RX_Byte();
         }
